@@ -33,7 +33,7 @@ implementation
 procedure TForm1.FormCreate(Sender: TObject);
 const
   len = 50;
-  LineBreakText = '#0';
+  LineBreakText = #0020;
 var
   ms: TMemoryStream = nil;
   CharCount: PtrInt = 0;//кол-во символов, которые надо скопировать
@@ -41,7 +41,7 @@ var
   PrevPos: PtrInt = 1;
   StartPos: PtrInt = 1;
   CurrPos: PtrInt = 0;
-  BreakTextLen: PtrInt = 0;
+  BreakTextLen: PtrInt = 0;//длина разделителя строк
 
   SL_src: TStringList = nil;
   SL_dest: TStringList = nil;
@@ -61,7 +61,9 @@ begin
   SB:= TStringBuilder.Create;
   try
     ms.Clear;
-    ms.LoadFromFile('example.txt');
+
+    //ms.LoadFromFile(CleanAndExpandDirectory('./../..') + 'example.txt');
+    ms.LoadFromFile(CleanAndExpandDirectory('./../..') + 'example_rus.txt');
     ms.Position:= 0;
     SL_src.LoadFromStream(ms);
 
@@ -71,7 +73,6 @@ begin
     for i:= 0 to Pred(SL_src.Count) do
       SB.Append(SL_src.Strings[i]);
 
-    SB.;
     Memo1.Clear;
 
     Memo1.Text:= SB.ToString;
@@ -114,7 +115,7 @@ begin
         then
           begin
             //CharCount:= (CurrPos - PrevPos);
-            str1:= UTF8Copy(SL_src.Text,PrevPos,CharCount);
+            str1:= UTF8Copy(SL_src.Text,PrevPos,(CurrPos - PrevPos));
 
             (*----------------*)
 
