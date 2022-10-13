@@ -33,7 +33,7 @@ implementation
 procedure TForm1.FormCreate(Sender: TObject);
 const
   len = 50;
-  LineBreakText = #0020;
+  LineBreakText = 'Ъъ';
 var
   ms: TMemoryStream = nil;
   CharCount: PtrInt = 0;//кол-во символов, которые надо скопировать
@@ -46,19 +46,14 @@ var
   SL_src: TStringList = nil;
   SL_dest: TStringList = nil;
   SB: TStringBuilder = nil;
-  {$IFDEF MSWINDOWS}
-  str1: RawByteString = '';
-  str2: RawByteString = '';
-  {$ELSE}
   str1: String = '';
   str2: String = '';
-  {$ENDIF}
+
   i: Integer;
 begin
   ms:= TMemoryStream.Create;
   SL_src:= TStringList.Create;
   SL_dest:= TStringList.Create;
-  SB:= TStringBuilder.Create;
   try
     ms.Clear;
 
@@ -70,23 +65,12 @@ begin
     SL_src.LineBreak:= sLineBreak;
     SL_src.Text:= UTF8StringReplace(SL_src.Text,sLineBreak,LineBreakText,[rfReplaceAll, rfIgnoreCase]);
 
-    for i:= 0 to Pred(SL_src.Count) do
-      SB.Append(SL_src.Strings[i]);
-
     Memo1.Clear;
 
-    Memo1.Text:= SB.ToString;
-    Memo1.Lines.Insert(0, '====== SB.ToString ======');
-    Memo1.Lines.Add('');
+    Memo1.Lines.Add('====== SL_src.Text ======');
+    Memo1.Lines.Add(SL_src.Text);
 
-    //Memo1.Lines.Add('====== SL_src.CommaText ======');
-    //Memo1.Lines.Add(SL_src.CommaText);
-    //Memo1.Lines.Add('====== SL_src.DelimitedText ======');
-    //Memo1.Lines.Add(SL_src.DelimitedText);
-    //Memo1.Lines.Add('====== SL_src.Text ======');
-    //Memo1.Lines.Add(SL_src.Text);
-    //
-    //Memo1.Lines.Add('');
+    Memo1.Lines.Add('');
     Memo1.Lines.Add('====== lines by ' + IntToStr(len) + ' char ======');
     PrevPos:= 1;
     StartPos:= 1;
@@ -114,43 +98,29 @@ begin
         if ((CurrPos - PrevPos) >= len)
         then
           begin
-            //CharCount:= (CurrPos - PrevPos);
-            str1:= UTF8Copy(SL_src.Text,PrevPos,(CurrPos - PrevPos));
-
-            (*----------------*)
+            str1:= UTF8Copy(SL_src.Text,PrevPos,CharCount);
 
             if (UTF8Pos(LineBreakText, str1) > 0)
             then
               begin
                 StartPos:= UTF8Pos(LineBreakText, SL_src.Text,PrevPos);
-                //CharCount:= StartPos - PrevPos;
-                //str2:= UTF8Copy(SL_src.Text,PrevPos,CharCount);
-                //SL_dest.Add(str2);
-                //PrevPos:= StartPos;
-                //StartPos:= Succ(StartPos);
 
                 while (
                   (UTF8Pos(LineBreakText, SL_src.Text, StartPos) > 0)
                     and (UTF8Copy(SL_src.Text,StartPos,BreakTextLen) = LineBreakText)
                       ) do
                 begin
-                  //SL_dest.Text:= SL_dest.Text + LineBreakText;
                   StartPos:= UTF8Pos(LineBreakText, SL_src.Text, StartPos) + BreakTextLen;
                 end;
 
                 CharCount:= StartPos - PrevPos;
                 str2:= UTF8Copy(SL_src.Text,PrevPos,CharCount);
                 SL_dest.Add(str2);
-
-                PrevPos:= StartPos;
-                //StartPos:= Succ(StartPos);
               end
             else
-            (*----------------*)
-              begin
                 SL_dest.Add(str1);
-                PrevPos:= StartPos;
-              end;
+
+            PrevPos:= StartPos;
           end;
     end;
 
@@ -161,7 +131,6 @@ begin
 
 
   finally
-    FreeAndNil(SB);
     FreeAndNil(SL_dest);
     FreeAndNil(SL_src);
     FreeAndNil(ms);
