@@ -32,9 +32,9 @@ implementation
 
 procedure TForm1.FormCreate(Sender: TObject);
 const
-  len = 50;
-  LineBreakText = '~';
-  //LineBreakText = sLineBreak;
+  len = 78;
+  //LineBreakText = '~';
+  LineBreakText = sLineBreak;
 var
   ms: TMemoryStream = nil;
   CharCount: PtrInt = 0;//кол-во символов, которые надо скопировать
@@ -81,21 +81,22 @@ begin
     begin
       CurrPos:= UTF8Pos(' ',SL_src.Text,StartPos);
 
-      if ((CurrPos - PrevPos) < len)
+      if ((CurrPos - PrevPos) < len) //строка с очередным пробелом меньше длины строки
       then
         begin
-          if ((TotalLen - CurrPos) < len) then
+          if ((TotalLen - CurrPos) < len) then //оставшийся текст меньше длины строки
           begin
             str1:= UTF8Copy(SL_src.Text,CurrPos, TotalLen - CurrPos);
 
-            //if (UTF8Pos(LineBreakText, str1) > 0) then
-            //begin
-            //  Caption:= IntToStr(StartPos);
-            //end;
-
-            SL_dest.Add(str1);
-
-            //PrevPos:= StartPos;
+            if (UTF8Pos(LineBreakText, str1) > 0) //оставшийся текст содержит символ разбивки строки
+            then
+              begin
+                StartPos:= UTF8Pos(LineBreakText, str1);
+                str2:= UTF8Copy(SL_src.Text,CurrPos, StartPos - BreakTextLen);
+                SL_dest.Add(str2);
+              end
+            else
+              SL_dest.Add(str1);
 
             Break;
           end;
@@ -137,9 +138,9 @@ begin
 
     //SL_dest.Text:= UTF8StringReplace(SL_dest.Text,LineBreakText,sLineBreak,[rfReplaceAll, rfIgnoreCase]);
 
-    for i:= 0 to Pred(SL_dest.Count) do
-      Memo1.Lines.Add(SL_dest.Strings[i]);
-
+    //for i:= 0 to Pred(SL_dest.Count) do
+    //  Memo1.Lines.Add(SL_dest.Strings[i]);
+    Memo1.Lines.Assign(SL_dest);
 
   finally
     FreeAndNil(SL_dest);
