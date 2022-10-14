@@ -142,7 +142,7 @@ begin
 //    //for i:= 0 to Pred(SL_dest.Count) do
 //    //  Memo1.Lines.Add(SL_dest.Strings[i]);
 //    Memo1.Lines.Assign(SL_dest);
-      BreakingText(SL_src,60);
+      BreakingText(SL_src,15);
       Memo1.Lines.Assign(SL_src);
 
   finally
@@ -170,8 +170,6 @@ begin
   try
     SL.Assign(TStrings(Sender));
     SL.LineBreak:= LineBreakStr;
-    //if (LineBreakStr <> sLineBreak) then
-    //  SL.Text:= UTF8StringReplace(SL.Text,sLineBreak,LineBreakStr,[rfReplaceAll, rfIgnoreCase]);
 
     PrevPos:= 1;
     StartPos:= 1;
@@ -183,34 +181,53 @@ begin
     begin
       CurrPos:= UTF8Pos(' ',SL.Text,StartPos);
 
-      if ((CurrPos - PrevPos) < aLineLen) //строка с очередным пробелом меньше длины строки
+      if ((CurrPos - PrevPos) <= aLineLen) //строка с очередным пробелом меньше длины строки
       then
         begin
           if ((TotalLen - CurrPos) < aLineLen) then //оставшийся текст меньше длины строки
           begin
+            //в последней строке обычно остается начальный пробел
+            if (UTF8Pos(' ',UTF8Copy(SL.Text,CurrPos, TotalLen - CurrPos)) = 1)
+              then CurrPos:= CurrPos + UTF8Length(' ');
+
             str1:= UTF8Copy(SL.Text,CurrPos, TotalLen - CurrPos);
 
-            if (UTF8Pos(LineBreakStr, str1) > 0) //оставшийся текст содержит символ разбивки строки
-            then
+            if (UTF8Pos(LineBreakStr, UTF8Copy(SL.Text,CurrPos, TotalLen - CurrPos)) > 0)
+            then //оставшийся текст содержит символ разбивки строки
               begin
                 StartPos:= UTF8Pos(LineBreakStr, str1);
                 str2:= UTF8Copy(SL.Text,CurrPos, StartPos - BreakTextLen);
                 TStrings(Sender).Add(str2);
               end
             else
-              TStrings(Sender).Add(str1);
-
+              //TStrings(Sender).Add(str1);
+              TStrings(Sender).Add(UTF8Copy(SL.Text,CurrPos, TotalLen - CurrPos));
             Break;
           end;
 
           CharCount:= (CurrPos - PrevPos);
-          StartPos:= Succ(CurrPos);
+
+          //защита от слишком короткой разбивки строк
+          //if (CharCount <= aLineLen) then
+          //begin
+          //  TStrings(Sender).Assign(SL);
+          //  Break;
+          //end;
+
+          StartPos:= CurrPos + UTF8Length(' ');
         end
       else
-        if ((CurrPos - PrevPos) >= aLineLen)
+        if ((CurrPos - PrevPos) > aLineLen)
         then
           begin
+            //if (CharCount <= Pred(aLineLen)) then
+            //begin
+            //  TStrings(Sender).Assign(SL);
+            //  Break;
+            //end;
+
             str1:= UTF8Copy(SL.Text,PrevPos,CharCount);
+
 
             if (UTF8Pos(LineBreakStr, str1) > 0)
             then
@@ -237,9 +254,6 @@ begin
             PrevPos:= StartPos;
           end;
     end;
-
-    //if (LineBreakStr <> sLineBreak) then
-    //  SL.Text:= UTF8StringReplace(SL.Text,LineBreakStr, sLineBreak,[rfReplaceAll, rfIgnoreCase]);
 
   finally
     SL.Free;
