@@ -1,13 +1,12 @@
 object Form1: TForm1
   Left = 344
-  Height = 533
+  Height = 402
   Top = 31
   Width = 570
   Caption = 'Form1'
-  ClientHeight = 533
+  ClientHeight = 402
   ClientWidth = 570
   OnCreate = FormCreate
-  LCLVersion = '2.3.0.0'
   object Memo1: TMemo
     AnchorSideLeft.Control = Owner
     AnchorSideTop.Control = Owner
@@ -16,7 +15,7 @@ object Form1: TForm1
     AnchorSideBottom.Control = Owner
     AnchorSideBottom.Side = asrBottom
     Left = 10
-    Height = 513
+    Height = 382
     Top = 10
     Width = 550
     Anchors = [akTop, akLeft, akRight, akBottom]

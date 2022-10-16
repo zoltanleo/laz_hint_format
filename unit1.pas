@@ -62,88 +62,8 @@ begin
     ms.Position:= 0;
     SL_src.LoadFromStream(ms);
     Memo1.Clear;
-//
-//    SL_src.LineBreak:= sLineBreak;
-//    //SL_src.Text:= UTF8StringReplace(SL_src.Text,sLineBreak,LineBreakText,[rfReplaceAll, rfIgnoreCase]);
-//
-//    Memo1.Clear;
-//
-//    Memo1.Lines.Add('====== SL_src.Text ======');
-//    Memo1.Lines.Add(SL_src.Text);
-//
-//    Memo1.Lines.Add('');
-//    Memo1.Lines.Add('====== lines by ' + IntToStr(len) + ' char ======');
-//    PrevPos:= 1;
-//    StartPos:= 1;
-//    TotalLen:= UTF8Length(SL_src.Text);
-//    BreakTextLen:= UTF8Length(LineBreakText);
-//
-//    while (UTF8Pos(' ',SL_src.Text,StartPos) > 0) do
-//    begin
-//      CurrPos:= UTF8Pos(' ',SL_src.Text,StartPos);
-//
-//      if ((CurrPos - PrevPos) < len) //строка с очередным пробелом меньше длины строки
-//      then
-//        begin
-//          if ((TotalLen - CurrPos) < len) then //оставшийся текст меньше длины строки
-//          begin
-//            str1:= UTF8Copy(SL_src.Text,CurrPos, TotalLen - CurrPos);
-//
-//            if (UTF8Pos(LineBreakText, str1) > 0) //оставшийся текст содержит символ разбивки строки
-//            then
-//              begin
-//                StartPos:= UTF8Pos(LineBreakText, str1);
-//                str2:= UTF8Copy(SL_src.Text,CurrPos, StartPos - BreakTextLen);
-//                SL_dest.Add(str2);
-//              end
-//            else
-//              SL_dest.Add(str1);
-//
-//            Break;
-//          end;
-//
-//          CharCount:= (CurrPos - PrevPos);
-//          StartPos:= Succ(CurrPos);
-//        end
-//      else
-//        if ((CurrPos - PrevPos) >= len)
-//        then
-//          begin
-//            str1:= UTF8Copy(SL_src.Text,PrevPos,CharCount);
-//
-//            if (UTF8Pos(LineBreakText, str1) > 0)
-//            then
-//              begin
-//                StartPos:= UTF8Pos(LineBreakText, SL_src.Text,PrevPos);
-//
-//                if (UTF8Copy(SL_src.Text,StartPos,BreakTextLen) = LineBreakText) then
-//                  begin
-//                    if (StartPos < (TotalLen - BreakTextLen))
-//                      then
-//                        Inc(StartPos, BreakTextLen)
-//                      else
-//                        Break
-//                      ;
-//                  end;
-//
-//                CharCount:= StartPos - PrevPos;
-//                str2:= UTF8Copy(SL_src.Text,PrevPos,CharCount - BreakTextLen);
-//                SL_dest.Add(str2);
-//              end
-//            else
-//                SL_dest.Add(str1);
-//
-//            PrevPos:= StartPos;
-//          end;
-//    end;
-//
-//    //SL_dest.Text:= UTF8StringReplace(SL_dest.Text,LineBreakText,sLineBreak,[rfReplaceAll, rfIgnoreCase]);
-//
-//    //for i:= 0 to Pred(SL_dest.Count) do
-//    //  Memo1.Lines.Add(SL_dest.Strings[i]);
-//    Memo1.Lines.Assign(SL_dest);
-      BreakingText(SL_src,60);
-      Memo1.Lines.Assign(SL_src);
+    BreakingText(SL_src,80);
+    Memo1.Lines.Assign(SL_src);
 
   finally
     FreeAndNil(SL_dest);
@@ -170,8 +90,6 @@ begin
   try
     SL.Assign(TStrings(Sender));
     SL.LineBreak:= LineBreakStr;
-    //if (LineBreakStr <> sLineBreak) then
-    //  SL.Text:= UTF8StringReplace(SL.Text,sLineBreak,LineBreakStr,[rfReplaceAll, rfIgnoreCase]);
 
     PrevPos:= 1;
     StartPos:= 1;
@@ -190,7 +108,16 @@ begin
           begin
             str1:= UTF8Copy(SL.Text,CurrPos, TotalLen - CurrPos);
 
+            //в последней строке остается начальный пробел
+            if (UTF8Pos(' ', str1) = 1) then
+              begin
+                CurrPos:= CurrPos + UTF8Length(' ');
+                str1:= UTF8Copy(SL.Text,CurrPos, TotalLen - CurrPos);
+
+              end;
+
             if (UTF8Pos(LineBreakStr, str1) > 0) //оставшийся текст содержит символ разбивки строки
+            //if (UTF8Pos(LineBreakStr, UTF8Copy(SL.Text,CurrPos, TotalLen - CurrPos)) > 0) //оставшийся текст содержит символ разбивки строки
             then
               begin
                 StartPos:= UTF8Pos(LineBreakStr, str1);
@@ -206,41 +133,35 @@ begin
           CharCount:= (CurrPos - PrevPos);
           StartPos:= Succ(CurrPos);
         end
-      else
-        if ((CurrPos - PrevPos) >= aLineLen)
-        then
-          begin
-            str1:= UTF8Copy(SL.Text,PrevPos,CharCount);
+      else {(CurrPos - PrevPos) >= aLineLen}
+        begin
+          str1:= UTF8Copy(SL.Text,PrevPos,CharCount);
 
-            if (UTF8Pos(LineBreakStr, str1) > 0)
-            then
-              begin
-                StartPos:= UTF8Pos(LineBreakStr, SL.Text,PrevPos);
+          if (UTF8Pos(LineBreakStr, str1) > 0)
+          then
+            begin
+              StartPos:= UTF8Pos(LineBreakStr, SL.Text,PrevPos);
 
-                if (UTF8Copy(SL.Text,StartPos,BreakTextLen) = LineBreakStr) then
-                  begin
-                    if (StartPos < (TotalLen - BreakTextLen))
-                      then
-                        Inc(StartPos, BreakTextLen)
-                      else
-                        Break
-                      ;
-                  end;
+              if (UTF8Copy(SL.Text,StartPos,BreakTextLen) = LineBreakStr) then
+                begin
+                  if (StartPos < (TotalLen - BreakTextLen))
+                    then
+                      Inc(StartPos, BreakTextLen)
+                    else
+                      Break
+                    ;
+                end;
 
-                CharCount:= StartPos - PrevPos;
-                str2:= UTF8Copy(SL.Text,PrevPos,CharCount - BreakTextLen);
-                TStrings(Sender).Add(str2);
-              end
-            else
-                TStrings(Sender).Add(str1);
+              CharCount:= StartPos - PrevPos;
+              str2:= UTF8Copy(SL.Text,PrevPos,CharCount - BreakTextLen);
+              TStrings(Sender).Add(str2);
+            end
+          else
+              TStrings(Sender).Add(str1);
 
-            PrevPos:= StartPos;
-          end;
+          PrevPos:= StartPos;
+        end;
     end;
-
-    //if (LineBreakStr <> sLineBreak) then
-    //  SL.Text:= UTF8StringReplace(SL.Text,LineBreakStr, sLineBreak,[rfReplaceAll, rfIgnoreCase]);
-
   finally
     SL.Free;
   end;
