@@ -18,7 +18,7 @@ type
   private
 
   public
-    procedure BreakingText(Sender: TStrings; aLineLen: PtrInt; LineBreakStr: String = sLineBreak);
+    procedure BreakingText(Sender: TStrings; aLineLen: PtrUInt; LineBreakStr: String = sLineBreak);
   end;
 
 var
@@ -32,7 +32,7 @@ implementation
 
 procedure TForm1.FormCreate(Sender: TObject);
 const
-  len = 78;
+  len = 10;
   //LineBreakText = '~';
   LineBreakText = sLineBreak;
 var
@@ -142,7 +142,7 @@ begin
 //    //for i:= 0 to Pred(SL_dest.Count) do
 //    //  Memo1.Lines.Add(SL_dest.Strings[i]);
 //    Memo1.Lines.Assign(SL_dest);
-      BreakingText(SL_src,15);
+      BreakingText(SL_src,9);
       Memo1.Lines.Assign(SL_src);
 
   finally
@@ -152,7 +152,7 @@ begin
   end;
 end;
 
-procedure TForm1.BreakingText(Sender: TStrings; aLineLen: PtrInt;
+procedure TForm1.BreakingText(Sender: TStrings; aLineLen: PtrUInt;
   LineBreakStr: String);
 var
   CharCount: PtrInt = 0;//кол-во символов, которые надо скопировать
@@ -173,6 +173,8 @@ begin
 
     PrevPos:= 1;
     StartPos:= 1;
+    CharCount:= 0;
+    CurrPos:= 0;
     TotalLen:= UTF8Length(SL.Text);
     BreakTextLen:= UTF8Length(LineBreakStr);
     TStrings(Sender).Clear;
@@ -181,7 +183,9 @@ begin
     begin
       CurrPos:= UTF8Pos(' ',SL.Text,StartPos);
 
-      if ((CurrPos - PrevPos) <= aLineLen) //строка с очередным пробелом меньше длины строки
+      if ((CurrPos - StartPos) > aLineLen) then ShowMessage('{3}');
+
+      if ((CurrPos - PrevPos) < aLineLen) //строка с очередным пробелом меньше длины строки
       then
         begin
           if ((TotalLen - CurrPos) < aLineLen) then //оставшийся текст меньше длины строки
@@ -206,28 +210,15 @@ begin
           end;
 
           CharCount:= (CurrPos - PrevPos);
-
-          //защита от слишком короткой разбивки строк
-          //if (CharCount <= aLineLen) then
-          //begin
-          //  TStrings(Sender).Assign(SL);
-          //  Break;
-          //end;
-
           StartPos:= CurrPos + UTF8Length(' ');
         end
       else
-        if ((CurrPos - PrevPos) > aLineLen)
+        if ((CurrPos - PrevPos) >= aLineLen)
         then
           begin
-            //if (CharCount <= Pred(aLineLen)) then
-            //begin
-            //  TStrings(Sender).Assign(SL);
-            //  Break;
-            //end;
-
             str1:= UTF8Copy(SL.Text,PrevPos,CharCount);
 
+            if ((CurrPos - StartPos) > aLineLen) then ShowMessage(str1);
 
             if (UTF8Pos(LineBreakStr, str1) > 0)
             then
@@ -252,6 +243,7 @@ begin
                 TStrings(Sender).Add(str1);
 
             PrevPos:= StartPos;
+            StartPos:= CurrPos + UTF8Length(' ');
           end;
     end;
 

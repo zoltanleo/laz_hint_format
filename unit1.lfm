@@ -4,9 +4,10 @@ object Form1: TForm1
   Top = 31
   Width = 570
   Caption = 'Form1'
-  ClientHeight = 510
+  ClientHeight = 533
   ClientWidth = 570
   OnCreate = FormCreate
+  LCLVersion = '2.3.0.0'
   object Memo1: TMemo
     AnchorSideLeft.Control = Owner
     AnchorSideTop.Control = Owner
