@@ -46,8 +46,10 @@ begin
     ms.Position:= 0;
     SL_src.LoadFromStream(ms);
     Memo1.Clear;
-    BreakingText(SL_src,80);
-    Memo1.Lines.Assign(SL_src);
+
+    if BreakingText(SL_src,50)
+      then Memo1.Lines.Assign(SL_src)
+      else Memo1.Lines.Text:= 'Не получилось';
   finally
     FreeAndNil(SL_src);
     FreeAndNil(ms);
@@ -84,11 +86,9 @@ begin
 
     while (UTF8Pos(' ',SL.Text,StartPos) > 0) do
     begin
-      CurrPos:= UTF8Pos(' ',SL.Text,StartPos);
+      CurrPos:= UTF8Pos(' ',SL.Text,StartPos) ;
 
-      if ((CurrPos - StartPos) > aLineLen) then ShowMessage('{3}');
-
-      if ((CurrPos - PrevPos) < aLineLen) //строка с очередным пробелом меньше длины строки
+      if ((CurrPos - PrevPos) <= aLineLen) //строка с очередным пробелом меньше длины строки
       then
         begin
           if ((TotalLen - CurrPos) < aLineLen) then //оставшийся текст меньше длины строки
@@ -123,7 +123,7 @@ begin
           CharCount:= (CurrPos - PrevPos);
           StartPos:= CurrPos + UTF8Length(' ');
         end
-      else {(CurrPos - PrevPos) >= aLineLen}
+      else {(CurrPos - PrevPos) > aLineLen}
         begin
           str1:= UTF8Copy(SL.Text,PrevPos,CharCount);
 
@@ -148,6 +148,13 @@ begin
           else
               TStrings(Sender).Add(str1);
 
+          //длина разбивки строки меньше, чем длина очередного слова
+          if (PrevPos = StartPos) then
+          begin
+            TStrings(Sender).Assign(SL);
+            Result:= False;
+            Break;
+          end;
 
           PrevPos:= StartPos;
         end;
