@@ -8,11 +8,7 @@
       <Unit>
         <Filename Value="project1.lpr"/>
         <IsPartOfProject Value="True"/>
-<<<<<<< HEAD
         <UsageCount Value="45"/>
-=======
-        <UsageCount Value="44"/>
->>>>>>> origin/7_1
       </Unit>
       <Unit>
         <Filename Value="unit1.pas"/>
@@ -22,22 +18,12 @@
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="Unit1"/>
         <IsVisibleTab Value="True"/>
-<<<<<<< HEAD
-        <TopLine Value="135"/>
-        <CursorPos Y="139"/>
+        <TopLine Value="89"/>
+        <CursorPos X="16" Y="71"/>
         <UsageCount Value="45"/>
         <Bookmarks Count="2">
-          <Item0 X="2" Y="102" ID="2"/>
-          <Item1 X="6" Y="65" ID="1"/>
-=======
-        <TopLine Value="237"/>
-        <CursorPos X="50" Y="246"/>
-        <FoldState Value=" TMiL0&apos;m"/>
-        <UsageCount Value="44"/>
-        <Bookmarks Count="2">
-          <Item0 X="2" Y="184" ID="2"/>
-          <Item1 X="8" Y="145" ID="1"/>
->>>>>>> origin/7_1
+          <Item0 X="2" Y="86" ID="2"/>
+          <Item1 X="6" Y="49" ID="1"/>
         </Bookmarks>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
@@ -46,11 +32,6 @@
     <JumpHistory HistoryIndex="29">
       <Position>
         <Filename Value="unit1.pas"/>
-        <Caret Line="219" TopLine="211"/>
-      </Position>
-      <Position>
-        <Filename Value="unit1.pas"/>
-<<<<<<< HEAD
         <Caret Line="221" TopLine="212"/>
       </Position>
       <Position>
@@ -164,121 +145,10 @@
       <Position>
         <Filename Value="unit1.pas"/>
         <Caret Line="115" TopLine="110"/>
-=======
-        <Caret Line="222" TopLine="217"/>
       </Position>
       <Position>
         <Filename Value="unit1.pas"/>
-        <Caret Line="221" Column="23" TopLine="207"/>
-      </Position>
-      <Position>
-        <Filename Value="unit1.pas"/>
-        <Caret Line="216" TopLine="213"/>
-      </Position>
-      <Position>
-        <Filename Value="unit1.pas"/>
-        <Caret Line="188" TopLine="183"/>
-      </Position>
-      <Position>
-        <Filename Value="unit1.pas"/>
-        <Caret Line="216" TopLine="211"/>
-      </Position>
-      <Position>
-        <Filename Value="unit1.pas"/>
-        <Caret Line="219" TopLine="211"/>
-      </Position>
-      <Position>
-        <Filename Value="unit1.pas"/>
-        <Caret Line="221" TopLine="212"/>
-      </Position>
-      <Position>
-        <Filename Value="unit1.pas"/>
-        <Caret Line="223" TopLine="218"/>
-      </Position>
-      <Position>
-        <Filename Value="unit1.pas"/>
-        <Caret Line="243" TopLine="238"/>
-      </Position>
-      <Position>
-        <Filename Value="unit1.pas"/>
-        <Caret Line="245" TopLine="238"/>
-      </Position>
-      <Position>
-        <Filename Value="unit1.pas"/>
-        <Caret Line="182" TopLine="177"/>
-      </Position>
-      <Position>
-        <Filename Value="unit1.pas"/>
-        <Caret Line="184" TopLine="177"/>
-      </Position>
-      <Position>
-        <Filename Value="unit1.pas"/>
-        <Caret Line="186" TopLine="177"/>
-      </Position>
-      <Position>
-        <Filename Value="unit1.pas"/>
-        <Caret Line="188" TopLine="183"/>
-      </Position>
-      <Position>
-        <Filename Value="unit1.pas"/>
-        <Caret Line="191" TopLine="183"/>
-      </Position>
-      <Position>
-        <Filename Value="unit1.pas"/>
-        <Caret Line="212" TopLine="207"/>
-      </Position>
-      <Position>
-        <Filename Value="unit1.pas"/>
-        <Caret Line="213" TopLine="207"/>
-      </Position>
-      <Position>
-        <Filename Value="unit1.pas"/>
-        <Caret Line="182" TopLine="177"/>
-      </Position>
-      <Position>
-        <Filename Value="unit1.pas"/>
-        <Caret Line="184" TopLine="177"/>
-      </Position>
-      <Position>
-        <Filename Value="unit1.pas"/>
-        <Caret Line="186" TopLine="177"/>
-      </Position>
-      <Position>
-        <Filename Value="unit1.pas"/>
-        <Caret Line="188" TopLine="183"/>
-      </Position>
-      <Position>
-        <Filename Value="unit1.pas"/>
-        <Caret Line="216" TopLine="211"/>
-      </Position>
-      <Position>
-        <Filename Value="unit1.pas"/>
-        <Caret Line="219" TopLine="211"/>
-      </Position>
-      <Position>
-        <Filename Value="unit1.pas"/>
-        <Caret Line="221" TopLine="218"/>
-      </Position>
-      <Position>
-        <Filename Value="unit1.pas"/>
-        <Caret Line="223" TopLine="218"/>
-      </Position>
-      <Position>
-        <Filename Value="unit1.pas"/>
-        <Caret Line="243" TopLine="238"/>
-      </Position>
-      <Position>
-        <Filename Value="unit1.pas"/>
-        <Caret Line="245" TopLine="238"/>
-      </Position>
-      <Position>
-        <Filename Value="unit1.pas"/>
-        <Caret Line="182" TopLine="177"/>
-      </Position>
-      <Position>
-        <Filename Value="unit1.pas"/>
-        <Caret Line="184" TopLine="180"/>
->>>>>>> origin/7_1
+        <Caret Line="21" Column="14" TopLine="17"/>
       </Position>
     </JumpHistory>
     <RunParams>
@@ -293,7 +163,7 @@
         <WatchScope Value="wpsLocal"/>
         <WatchKind Value="wpkWrite"/>
         <Source Value="unit1.pas"/>
-        <Line Value="188"/>
+        <Line Value="172"/>
       </Item>
     </BreakPoints>
     <Watches>

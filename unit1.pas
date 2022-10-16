@@ -18,7 +18,8 @@ type
   private
 
   public
-    procedure BreakingText(Sender: TStrings; aLineLen: PtrUInt; LineBreakStr: String = sLineBreak);
+    function BreakingText(Sender: TStrings; aLineLen: PtrUInt;
+                          LineBreakStr: String = sLineBreak): Boolean;
   end;
 
 var
@@ -31,29 +32,12 @@ implementation
 { TForm1 }
 
 procedure TForm1.FormCreate(Sender: TObject);
-const
-  len = 10;
-  //LineBreakText = '~';
-  LineBreakText = sLineBreak;
 var
   ms: TMemoryStream = nil;
-  CharCount: PtrInt = 0;//кол-во символов, которые надо скопировать
-  TotalLen: PtrInt = 0;//общая длина текста
-  PrevPos: PtrInt = 1;
-  StartPos: PtrInt = 1;
-  CurrPos: PtrInt = 0;
-  BreakTextLen: PtrInt = 0;//длина разделителя строк
-
   SL_src: TStringList = nil;
-  SL_dest: TStringList = nil;
-  str1: String = '';
-  str2: String = '';
-
-  i: Integer;
 begin
   ms:= TMemoryStream.Create;
   SL_src:= TStringList.Create;
-  SL_dest:= TStringList.Create;
   try
     ms.Clear;
 
@@ -65,14 +49,13 @@ begin
     BreakingText(SL_src,80);
     Memo1.Lines.Assign(SL_src);
   finally
-    FreeAndNil(SL_dest);
     FreeAndNil(SL_src);
     FreeAndNil(ms);
   end;
 end;
 
-procedure TForm1.BreakingText(Sender: TStrings; aLineLen: PtrUInt;
-  LineBreakStr: String);
+function TForm1.BreakingText(Sender: TStrings; aLineLen: PtrUInt;
+  LineBreakStr: String): Boolean;
 var
   CharCount: PtrInt = 0;//кол-во символов, которые надо скопировать
   TotalLen: PtrInt = 0;//общая длина текста
@@ -85,6 +68,7 @@ var
   str2: String = '';
   SL: TStringList = nil;
 begin
+  Result:= True;
   SL:= TStringList.Create;
   try
     SL.Assign(TStrings(Sender));
