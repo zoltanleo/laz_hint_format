@@ -18,11 +18,11 @@
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="Unit1"/>
         <IsVisibleTab Value="True"/>
-        <TopLine Value="61"/>
-        <CursorPos Y="69"/>
+        <TopLine Value="46"/>
+        <CursorPos X="30" Y="50"/>
         <UsageCount Value="47"/>
         <Bookmarks Count="2">
-          <Item0 X="2" Y="88" ID="2"/>
+          <Item0 X="2" Y="85" ID="2"/>
           <Item1 X="9" Y="50" ID="1"/>
         </Bookmarks>
         <Loaded Value="True"/>
@@ -163,7 +163,7 @@
         <WatchScope Value="wpsLocal"/>
         <WatchKind Value="wpkWrite"/>
         <Source Value="unit1.pas"/>
-        <Line Value="180"/>
+        <Line Value="162"/>
       </Item>
     </BreakPoints>
     <Watches>

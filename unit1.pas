@@ -47,7 +47,7 @@ begin
     SL_src.LoadFromStream(ms);
     Memo1.Clear;
 
-    if BreakingText(SL_src,76)
+    if BreakingText(SL_src,42)
       then Memo1.Lines.Assign(SL_src)
       else Memo1.Lines.Text:= 'Не получилось';
   finally
@@ -65,9 +65,6 @@ var
   StartPos: PtrInt = 1;
   CurrPos: PtrInt = 0;
   BreakTextLen: PtrInt = 0;//длина разделителя строк
-
-  //str1: String = '';
-  //str2: String = '';
   SL: TStringList = nil;
 begin
   Result:= True;
@@ -97,21 +94,14 @@ begin
             if (UTF8Pos(' ',UTF8Copy(SL.Text,CurrPos, TotalLen - CurrPos)) = 1)
               then CurrPos:= CurrPos + UTF8Length(' ');
 
-            //str1:= UTF8Copy(SL.Text,CurrPos, TotalLen - CurrPos);
-
-
-            //if (UTF8Pos(LineBreakStr, str1) > 0) //оставшийся текст содержит символ разбивки строки
-            if (UTF8Pos(LineBreakStr, UTF8Copy(SL.Text,CurrPos, TotalLen - CurrPos)) > 0) //оставшийся текст содержит символ разбивки строки
+            //оставшийся текст содержит символ разбивки строки
+            if (UTF8Pos(LineBreakStr, UTF8Copy(SL.Text,CurrPos, TotalLen - CurrPos)) > 0)
             then
               begin
-                //StartPos:= UTF8Pos(LineBreakStr, str1);
-                //str2:= UTF8Copy(SL.Text,CurrPos, StartPos - BreakTextLen);
-                //TStrings(Sender).Add(str2);
                 StartPos:= UTF8Pos(LineBreakStr, UTF8Copy(SL.Text,CurrPos, TotalLen - CurrPos));
                 TStrings(Sender).Add(UTF8Copy(SL.Text,CurrPos, StartPos - BreakTextLen));
               end
             else
-              //TStrings(Sender).Add(str1);
               TStrings(Sender).Add(UTF8Copy(SL.Text,CurrPos, TotalLen - CurrPos));
             Break;
           end;
@@ -121,9 +111,6 @@ begin
         end
       else {(CurrPos - PrevPos) > aLineLen}
         begin
-          //str1:= UTF8Copy(SL.Text,PrevPos,CharCount);
-
-          //if (UTF8Pos(LineBreakStr, str1) > 0)
           if (UTF8Pos(LineBreakStr, UTF8Copy(SL.Text,PrevPos,CharCount)) > 0)
           then
             begin
@@ -139,15 +126,10 @@ begin
                 end;
 
               CharCount:= StartPos - PrevPos;
-              //str2:= UTF8Copy(SL.Text,PrevPos,CharCount - BreakTextLen);
-              //TStrings(Sender).Add(str2);
               TStrings(Sender).Add(UTF8Copy(SL.Text,PrevPos,CharCount - BreakTextLen));
-
             end
           else
-            //TStrings(Sender).Add(str1);
             TStrings(Sender).Add(UTF8Copy(SL.Text,PrevPos,CharCount));
-
 
           //длина разбивки строки меньше, чем длина очередного слова
           if (PrevPos = StartPos) then
